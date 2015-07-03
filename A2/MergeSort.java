@@ -40,11 +40,48 @@ public class MergeSort{
 
 		Do not change the function signature (name/parameters).
 	*/
-	public static ListNode MergeSort(ListNode head){
+	public static ListNode splitList(ListNode head) { //This function outputs an array with alternate values from the input array
+		if (head == null || head.next == null) {
+			return head;
+		}
+
+		ListNode nextPointer = head.next;  //Points to the value to skip (the alternate value)
+
+		return new ListNode(head.value, splitList(nextPointer.next)); //Create another array with next of the NextPointer
+
+	}	
+
+	public static ListNode MergeSort(ListNode head) {
 		
-		/* ... Your code here ... */	
-		return head;
-	}
+	  if (head == null || head.next == null) 
+	   	return head; 
+
+	  ListNode l1 = splitList(head);	// Create two arrays from the input array, each having alternate values. 
+	  ListNode l2 = splitList(head.next); 
+
+	  ListNode s1 = MergeSort(l1); // S1 and S2 have sorted l1 and l2 respectively
+	  ListNode s2 = MergeSort(l2);
+
+	  return merge(s1, s2); //Merge sorted s1 and s2
+	} 
+
+	public static ListNode merge(ListNode list1, ListNode list2) 
+    { 
+    	//Base Cases
+    	if (list1 == null) 
+    		return list2; //If nothing left in list1, return list 2
+
+ 	 		if (list2 == null)
+ 	 			return list1; //If nothing left in list2, return list 1
+
+		  if (list1.value < list2.value) {
+		    list1.next = merge(list1.next, list2);
+		    return list1;
+		  } else {
+		    list2.next = merge(list2.next, list1);
+		    return list2;
+		  }
+		}
 	
 	
 	/* ListNode class */
